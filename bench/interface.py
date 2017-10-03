@@ -19,6 +19,9 @@ class Interface(object):
 
         return "<Interface {s.machine.name} {s.name}>".format(s=self)
 
+    def get_name(self):
+        return self.name
+
     def up(self):
         self.machine.up(self.name)
 
@@ -36,3 +39,6 @@ class Interface(object):
 
     def ping(self, destination, count=None, deadline=None):
         self.machine.ping(destination, from_if=self.name, count=count, deadline=deadline)
+
+    def arp_get(self, address):
+        return self.machine.arp_get(address)
