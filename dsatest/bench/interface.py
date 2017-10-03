@@ -34,8 +34,9 @@ class Interface(object):
     def flush_addresses(self):
         self.machine.flush_addresses(self.name)
 
-    def ping(self, destination, count=None, deadline=None):
-        self.machine.ping(destination, from_if=self.name, count=count, deadline=deadline)
+    def ping(self, destination, count=None, deadline=None, size=None):
+        self.machine.ping(destination, from_if=self.name, count=count,
+                          deadline=deadline, size=size)
 
     def arp_get(self, address):
         return self.machine.arp_get(address, self.name)

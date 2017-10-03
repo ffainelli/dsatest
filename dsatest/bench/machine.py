@@ -59,7 +59,7 @@ class Machine:
         self.bridges.remove(bridge)
         bridge.destroy()
 
-    def ping(self, destination, count=None, deadline=None, from_if=None):
+    def ping(self, destination, count=None, deadline=None, from_if=None, size=None):
         cmd = "ping "
         if count is not None:
             cmd += " -c {} ".format(count)
@@ -67,6 +67,8 @@ class Machine:
             cmd += " -w {} ".format(deadline)
         if from_if is not None:
             cmd += " -I {} ".format(from_if)
+        if size is not None:
+            cmd += " -s {} ".format(size)
         cmd += " {}".format(destination)
         self.control.exec_and_check(cmd)
 
