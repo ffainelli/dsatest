@@ -47,3 +47,23 @@ class TestPing(unittest.TestCase):
         for i, link in enumerate(bench.links):
             addr = self.get_address(i, "target")
             link.host_if.ping(addr, count=1, deadline=10)
+
+    def test_port_ping_sizes(self):
+        for i, link in enumerate(bench.links):
+            addr = get_address(i, "target")
+            """
+            This is a very small size, but the HW should be rounding up
+            to a 64 bytes packet on the wire. Depending on the host, this
+            may fail. If it does, you may need to patch your host driver
+            """
+            link.host_if.ping(addr, count=1, deadline=10, size=1)
+            """
+            This would round up the total Ethernet size sans FCS to 60 bytes
+            and should be the minumum acceptable size
+            """
+            link.host_if.ping(addr, count=1, deadline=10, size=32)
+            """
+            This would result in a total Ethernet size sans FCS of 1500 bytes
+            and should be accepted by the switch
+            """
+            link.host_if.ping(addr, count=1, deadline=10, size=1472)
