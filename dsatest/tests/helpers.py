@@ -38,13 +38,14 @@ def up_and_wait(up_interfaces, monitored=None, expand=True):
     if not monitored:
         monitored = interfaces
 
-    timeout = 10
+    timeout = 20
     while timeout:
         for interface in monitored:
             read_operstate_cmd = "cat /sys/class/net/{}/operstate".format(interface.name)
             ret, stdout, _ = interface.machine.execute(read_operstate_cmd)
-            if ret == 0 and stdout == "up":
-                monitored.remove(interface)
+            for line in stdout.splitlines():
+                if ret == 0 and line == "up":
+                    monitored.remove(interface)
 
         if not monitored:
             return
