@@ -53,3 +53,19 @@ def up_and_wait(up_interfaces, monitored=None, expand=True):
         timeout = timeout - 1
 
     raise RuntimeError("some interfaces did not up within alloted period")
+
+def get_address(offset, side, prefix_length=None):
+    if side == "host":
+        side = "1"
+    elif side == "target":
+        side = "2"
+    else:
+        raise ValueError("unexpected side")
+
+    address = "192.168.{}.{}".format(str(10 + offset), side)
+    if prefix_length:
+        address = "{}/{}".format(address, prefix_length)
+
+    return address
+
+
