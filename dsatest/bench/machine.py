@@ -80,3 +80,13 @@ class Machine:
                 return mac
 
         return None
+
+    def add_vid(self, interface, vid):
+        command = "ip link add {0}.{1} link {0} type vlan id {1}".format(interface, vid)
+        ret, _, _ = self.control.execute(command)
+        return ret
+
+    def del_vid(self, interface, vid):
+        command = "ip link del {0}.{1}".format(interface, vid)
+        ret, _, _, = self.control.execute(command)
+        return ret

@@ -10,6 +10,7 @@ class Interface(object):
         self.machine = machine
         self.switch = switch
         self.port_id = port_id
+        self.vlan_interfaces = {}
 
 
     def __repr__(self):
@@ -39,3 +40,19 @@ class Interface(object):
 
     def arp_get(self, address):
         return self.machine.arp_get(address, self.name)
+
+    def add_vlan(self, vid):
+        ret = self.machine.add_vid(self.name, vid)
+        """ Treat existing interfaces as okay """
+        if ret != 0:
+            return ret
+        vlan = Interface("{}.{}".format(self.name, vid),
+                         self.machine, self.switch, self.port_id)
+        self.vlan_interfaces[vid] = vlan
+
+    def del_vlan(self, vid):
+        ret = self.machine.del_vid(self.name, vid)
+        if ret != 0:
+            return ret
+        del self.vlan_interfaces[vid]
+
